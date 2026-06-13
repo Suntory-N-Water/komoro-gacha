@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://komoro-gacha.suntory-n-water.com/sitemap-index.xml

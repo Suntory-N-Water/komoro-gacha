@@ -7,9 +7,8 @@ import { defineConfig } from "astro/config";
 
 const url =
   import.meta.env.SITE ||
-  // TODO: 合ってるのかこれ？
   import.meta.env["PUBLIC_APP_URL"] ||
-  "http://localhost:4321";
+  "https://komoro-gacha.suntory-n-water.com";
 
 // https://astro.build/config
 export default defineConfig({
