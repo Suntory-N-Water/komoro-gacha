@@ -18,9 +18,40 @@ type GachaAppProps = {
   readonly selectableOptions: ReadonlyArray<SelectableGachaOption>;
 };
 
+// 前回引いた条件を保持する localStorage キー
+const LAST_CONDITION_KEY = "komoro-gacha:last-condition";
+
+// 起動時に前回引いた条件を復元する。未保存・壊れた値・列挙外の値は null。
+function loadLastCondition(): {
+  amountLevel: AmountLevel;
+  noodleChoice: NoodleChoice;
+} | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(
+      window.localStorage.getItem(LAST_CONDITION_KEY) ?? "null",
+    );
+    const amountOk = (AMOUNT_LEVELS as readonly string[]).includes(
+      parsed?.amountLevel,
+    );
+    const noodleOk = (NOODLE_CHOICES as readonly string[]).includes(
+      parsed?.noodleChoice,
+    );
+    return amountOk && noodleOk ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function GachaApp({ selectableOptions }: GachaAppProps) {
-  const [amountLevel, setAmountLevel] = useState<AmountLevel>("ふつう");
-  const [noodleChoice, setNoodleChoice] = useState<NoodleChoice>("そば");
+  const [amountLevel, setAmountLevel] = useState<AmountLevel>(
+    () => loadLastCondition()?.amountLevel ?? "ふつう",
+  );
+  const [noodleChoice, setNoodleChoice] = useState<NoodleChoice>(
+    () => loadLastCondition()?.noodleChoice ?? "そば",
+  );
   const [phase, setPhase] = useState<GachaPhase>("idle");
   const [output, setOutput] = useState<DrawMenuOutput | null>(null);
   const timers = useRef<Array<number>>([]);
@@ -44,6 +75,14 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
   useEffect(() => clearTimers, [clearTimers]);
 
   async function startGacha() {
+    // 最初の「引く」押下時のみ条件を保存する(リロールでは更新しない)
+    if (phase === "idle" && typeof window !== "undefined") {
+      window.localStorage.setItem(
+        LAST_CONDITION_KEY,
+        JSON.stringify({ amountLevel, noodleChoice }),
+      );
+    }
+
     clearTimers();
     setPhase("drop");
     setOutput(null);
@@ -77,7 +116,7 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
 
   return (
     <main
-      className="relative mx-auto flex h-dvh max-w-107.5 flex-col overflow-hidden bg-[#f4ead8] font-serif text-[#1e1208] shadow-2xl shadow-[#8a5f2d]/10"
+      className="relative mx-auto flex min-h-dvh w-full max-w-107.5 flex-col bg-[#f4ead8] font-serif text-[#1e1208] shadow-2xl shadow-[#8a5f2d]/10"
       aria-busy={phase !== "idle"}
     >
       <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_79px,rgba(180,150,100,0.06)_80px)]" />

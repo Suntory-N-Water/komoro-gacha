@@ -76,6 +76,11 @@ export default function ResultOverlay({
       : result.modifiers
           .map((modifier) => (modifier === "いなり" ? "+いなり" : modifier))
           .join("　");
+  // 「親子丼セット(大・うどんせいろ)」を主役の品名と括弧注記に分割し、中黒の途中で割れないようにする
+  const rawName = menuItem?.name ?? "候補なし";
+  const noteIndex = rawName.search(/[((]/);
+  const baseName = noteIndex === -1 ? rawName : rawName.slice(0, noteIndex);
+  const noteName = noteIndex === -1 ? "" : rawName.slice(noteIndex);
 
   return (
     <div
@@ -130,7 +135,12 @@ export default function ResultOverlay({
               tabIndex={-1}
               className="text-[32px] leading-[1.3] font-black tracking-[0.06em] text-wrap-balance outline-none focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]"
             >
-              {menuItem?.name ?? "候補なし"}
+              {baseName}
+              {noteName !== "" && (
+                <span className="mt-1.5 block text-[19px] font-bold tracking-[0.04em] text-[#7a5230]">
+                  {noteName}
+                </span>
+              )}
             </h2>
           </div>
 

@@ -61,7 +61,7 @@ export default function ChoiceGroup<T extends ChoiceValue>({
                 }
               }}
               className={[
-                "min-h-11 flex-1 rounded-[10px] border outline-none transition enabled:cursor-pointer active:translate-y-px disabled:cursor-not-allowed disabled:opacity-65 focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]",
+                "min-h-11 min-w-0 flex-1 rounded-[10px] border outline-none transition enabled:cursor-pointer active:translate-y-px disabled:cursor-not-allowed disabled:opacity-65 focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]",
                 size === "amount"
                   ? "px-0.5 py-3 text-sm tracking-[0.04em]"
                   : "px-1 py-3.5 text-base tracking-wider",

@@ -102,6 +102,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100%;
+  /* main の枠外(画面がカード幅より広い場合)に白が露出しないよう全面をクリーム色で塗る */
+  background-color: #f4ead8;
 }
 
 body {
@@ -109,6 +111,8 @@ body {
     "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 横スクロール防止はここで担保する(main に overflow-x:clip を付けると Safari で縦も巻き込まれてズーム時に崩れるため) */
+  overflow-x: hidden;
 }
 
 button {
