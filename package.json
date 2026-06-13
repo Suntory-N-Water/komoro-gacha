@@ -25,8 +25,7 @@
     "type-check:ai": "astro check && tsc --noEmit --pretty false",
     "ai-check": "pnpm run format && pnpm run lint:ai && pnpm run type-check:ai",
     "cf-typegen": "wrangler types",
-    "knip": "knip",
-    "prepare": "husky"
+    "knip": "knip"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
