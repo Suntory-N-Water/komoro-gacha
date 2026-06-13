@@ -1,7 +1,7 @@
 {
   "extends": ["astro/tsconfigs/strict", "@tsconfig/strictest"],
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "public/sw.js"],
   "compilerOptions": {
     "types": ["./worker-configuration.d.ts"],
     "jsx": "react-jsx",

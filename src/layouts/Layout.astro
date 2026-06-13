@@ -15,6 +15,9 @@ const { title = '小諸そばガチャ' } = Astro.props;
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <meta name='theme-color' content='#f4ead8' />
     <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='apple-mobile-web-app-title' content='小諸ガチャ' />
+    <link rel='manifest' href='/manifest.webmanifest' />
+    <link rel='apple-touch-icon' href='/icon-192.png' />
     <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
     <link rel='icon' href='/favicon.ico' />
     <meta name='generator' content={Astro.generator} />
@@ -22,5 +25,12 @@ const { title = '小諸そばガチャ' } = Astro.props;
   </head>
   <body>
     <slot />
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>
