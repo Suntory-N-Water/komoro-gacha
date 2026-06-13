@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { DrawMenuOutput } from "../../usecase/gacha";
 import Capsule from "./Capsule";
 import MenuPhotoPlaceholder from "./MenuPhotoPlaceholder";
@@ -17,11 +18,44 @@ export default function ResultOverlay({
   onBack,
   onReroll,
 }: ResultOverlayProps) {
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const showResult = phase === "result";
+
+  useEffect(() => {
+    if (phase !== "idle" && !showResult) {
+      overlayRef.current?.focus();
+    }
+  }, [phase, showResult]);
+
+  useEffect(() => {
+    if (showResult) {
+      headingRef.current?.focus();
+    }
+  }, [showResult]);
+
+  useEffect(() => {
+    if (!showResult) {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        onBack();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onBack, showResult]);
+
   if (phase === "idle") {
     return null;
   }
 
-  const showResult = phase === "result";
   const result = output?.status === "hit" ? output.result : null;
   const menuItem = result?.menuItem;
   const hotColdColor =
@@ -45,8 +79,12 @@ export default function ResultOverlay({
 
   return (
     <div
+      ref={overlayRef}
       className="absolute inset-0 z-50 flex animate-overlay-in flex-col items-center overflow-y-auto bg-[#f4ead8]"
-      aria-hidden="false"
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      aria-label={showResult ? "抽選結果" : "抽選中"}
     >
       <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_79px,rgba(180,150,100,0.06)_80px)]" />
 
@@ -55,12 +93,16 @@ export default function ResultOverlay({
       </div>
 
       {!showResult ? (
-        <div className="relative z-10 animate-blink-wait pb-5 pl-[0.45em] text-[11px] tracking-[0.45em] text-[#b4a088]">
+        <div
+          className="relative z-10 animate-blink-wait pb-5 pl-[0.45em] text-[11px] tracking-[0.45em] text-[#b4a088]"
+          role="status"
+          aria-live="polite"
+        >
           抽選中...
         </div>
       ) : (
         <section
-          className="relative z-10 w-full max-w-92 animate-result-rise px-5.5 pb-12"
+          className="relative z-10 w-full max-w-92 animate-result-rise px-5.5 pb-[calc(3rem+env(safe-area-inset-bottom))]"
           aria-live="polite"
         >
           <div className="mb-4.5 flex justify-center gap-2">
@@ -83,7 +125,11 @@ export default function ResultOverlay({
           <MenuPhotoPlaceholder />
 
           <div className="mb-3 text-center">
-            <h2 className="text-[32px] leading-[1.3] font-black tracking-[0.06em] text-wrap-balance">
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className="text-[32px] leading-[1.3] font-black tracking-[0.06em] text-wrap-balance outline-none focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]"
+            >
               {menuItem?.name ?? "候補なし"}
             </h2>
           </div>
@@ -102,14 +148,14 @@ export default function ResultOverlay({
             <button
               type="button"
               onClick={onBack}
-              className="flex-1 rounded-[10px] border border-[#d4c4a8] bg-[#faf3e8] p-3.5 text-sm tracking-widest text-[#8a7a6a] transition active:translate-y-px"
+              className="min-h-11 flex-1 cursor-pointer rounded-[10px] border border-[#d4c4a8] bg-[#faf3e8] p-3.5 text-sm tracking-widest text-[#8a7a6a] outline-none transition active:translate-y-px focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]"
             >
               ← 戻る
             </button>
             <button
               type="button"
               onClick={onReroll}
-              className="flex-2 rounded-[10px] border-2 border-[#3d6b4a] bg-[#3d6b4a] p-3.5 text-sm font-bold tracking-[0.18em] text-[#f4ead8] shadow-[0_4px_16px_rgba(61,107,74,0.22)] transition active:translate-y-px"
+              className="min-h-11 flex-2 cursor-pointer rounded-[10px] border-2 border-[#3d6b4a] bg-[#3d6b4a] p-3.5 text-sm font-bold tracking-[0.18em] text-[#f4ead8] shadow-[0_4px_16px_rgba(61,107,74,0.22)] outline-none transition active:translate-y-px focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]"
             >
               もう一回
             </button>

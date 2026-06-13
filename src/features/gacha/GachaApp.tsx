@@ -76,10 +76,16 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
   }
 
   return (
-    <main className="relative mx-auto flex h-dvh max-w-107.5 flex-col overflow-hidden bg-[#f4ead8] font-serif text-[#1e1208] shadow-2xl shadow-[#8a5f2d]/10">
+    <main
+      className="relative mx-auto flex h-dvh max-w-107.5 flex-col overflow-hidden bg-[#f4ead8] font-serif text-[#1e1208] shadow-2xl shadow-[#8a5f2d]/10"
+      aria-busy={phase !== "idle"}
+    >
       <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_79px,rgba(180,150,100,0.06)_80px)]" />
 
-      <header className="relative z-10 shrink-0 border-b border-[#d4c4a8] bg-linear-to-b from-[#eddfc8] to-[#f4ead8] px-7 pt-13 pb-5 text-center">
+      <header
+        className="relative z-10 shrink-0 border-b border-[#d4c4a8] bg-linear-to-b from-[#eddfc8] to-[#f4ead8] px-7 pt-[calc(3.25rem+env(safe-area-inset-top))] pb-5 text-center"
+        aria-hidden={phase !== "idle"}
+      >
         <p className="mb-1.5 pl-[0.55em] text-[11px] font-medium tracking-[0.55em] text-[#7a5230]">
           小諸そば
         </p>
@@ -98,6 +104,7 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
       <section
         className="relative z-10 flex flex-1 flex-col justify-center gap-7 px-5.5"
         aria-label="ガチャ条件"
+        aria-hidden={phase !== "idle"}
       >
         <ChoiceGroup
           label="量"
@@ -108,6 +115,7 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
             selectableKeys.has(`${value}:${noodleChoice}`)
           }
           onSelect={setAmountLevel}
+          disabled={phase !== "idle"}
         />
         <ChoiceGroup
           label="種別"
@@ -118,17 +126,28 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
             selectableKeys.has(`${amountLevel}:${value}`)
           }
           onSelect={setNoodleChoice}
+          disabled={phase !== "idle"}
         />
+        <p
+          className="text-center text-[11px] tracking-[0.18em] text-[#8a7a6a]"
+          aria-live="polite"
+        >
+          今日の条件: {amountLevel} / {noodleChoice}
+        </p>
       </section>
 
-      <div className="relative z-10 shrink-0 px-6 pt-5 pb-13">
+      <div
+        className="relative z-10 shrink-0 px-6 pt-5 pb-[calc(3.25rem+env(safe-area-inset-bottom))]"
+        aria-hidden={phase !== "idle"}
+      >
         <button
           type="button"
           disabled={phase !== "idle"}
+          aria-label={`${amountLevel}、${noodleChoice}でガチャを引く`}
           onClick={() => {
             void startGacha();
           }}
-          className="w-full animate-button-pulse rounded-[14px] border-2 border-[#3d6b4a] bg-[#3d6b4a] p-5 pl-[0.55em] text-xl font-bold tracking-[0.55em] text-[#f4ead8] shadow-[0_4px_20px_rgba(61,107,74,0.25)] outline-none transition active:translate-y-px disabled:cursor-wait disabled:opacity-75"
+          className="min-h-16 w-full animate-button-pulse rounded-[14px] border-2 border-[#3d6b4a] bg-[#3d6b4a] p-5 pl-[0.55em] text-xl font-bold tracking-[0.55em] text-[#f4ead8] shadow-[0_4px_20px_rgba(61,107,74,0.25)] outline-none transition enabled:cursor-pointer active:translate-y-px disabled:cursor-wait disabled:opacity-75 focus-visible:ring-2 focus-visible:ring-[#3d6b4a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4ead8]"
         >
           引　く
         </button>
