@@ -121,7 +121,9 @@ export default function ResultOverlay({
             </div>
             <div className="inline-flex items-center rounded-full border border-[#d4c4a8] bg-[#faf3e8] px-3.5 py-1">
               <span className="text-[11px] tracking-[0.12em] text-[#8a7a6a]">
-                {menuItem?.category ?? ""}
+                {menuItem?.category === "麺"
+                  ? (menuItem.noodleKind ?? "")
+                  : (menuItem?.category ?? "")}
               </span>
             </div>
           </div>
