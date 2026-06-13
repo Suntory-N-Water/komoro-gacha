@@ -8,7 +8,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",
     "start": "astro preview",
     "start:worker": "pnpm run build && wrangler dev",
@@ -30,8 +30,12 @@
     "knip": "knip"
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.7",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^6.4.6"
+    "@types/react-dom": "^19.2.3",
+    "astro": "^6.4.6",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
@@ -40,6 +44,7 @@
     "@commitlint/config-conventional": "^21.0.2",
     "@tailwindcss/vite": "^4.3.1",
     "@tsconfig/strictest": "^2.0.8",
+    "@types/react": "^19.2.17",
     "@vitest/coverage-v8": "^4.1.8",
     "knip": "^6.16.1",
     "prettier": "^3.8.4",
