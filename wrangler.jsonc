@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "komoro-gacha",
+  "compatibility_date": "2026-06-13",
+  "assets": {
+    "directory": "./dist"
+  },
+  "vars": {
+    "PUBLIC_APP_URL": "https://komoro-gacha.suntory-n-water.com"
+  }
+}
