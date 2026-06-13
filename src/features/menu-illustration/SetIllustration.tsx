@@ -1,10 +1,10 @@
+import { DonburiArtwork } from "./DonburiIllustration";
 import type {
   MenuVisualDonburi,
   MenuVisualItem,
   MenuVisualNoodle,
   MenuVisualSpec,
 } from "./menuVisualSpec";
-import { DonburiArtwork } from "./DonburiIllustration";
 import { NoodleArtwork } from "./NoodleIllustration";
 import { SeiroArtwork } from "./SeiroIllustration";
 

@@ -1,9 +1,9 @@
-import { resolveMenuVisualSpec } from "./resolveMenuVisualSpec";
 import { DonburiIllustration } from "./DonburiIllustration";
+import type { MenuVisualSpec } from "./menuVisualSpec";
 import { NoodleIllustration } from "./NoodleIllustration";
+import { resolveMenuVisualSpec } from "./resolveMenuVisualSpec";
 import { SeiroIllustration } from "./SeiroIllustration";
 import { SetIllustration } from "./SetIllustration";
-import type { MenuVisualSpec } from "./menuVisualSpec";
 
 type Props = {
   menuId: string;

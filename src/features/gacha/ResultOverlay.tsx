@@ -85,7 +85,7 @@ export default function ResultOverlay({
   return (
     <div
       ref={overlayRef}
-      className="absolute inset-0 z-50 flex animate-overlay-in flex-col items-center overflow-y-auto bg-[#f4ead8]"
+      className="absolute inset-0 z-50 flex animate-overlay-in flex-col items-center justify-center overflow-y-auto bg-[#f4ead8] py-[env(safe-area-inset-top)]"
       tabIndex={-1}
       role="dialog"
       aria-modal="true"
@@ -93,21 +93,20 @@ export default function ResultOverlay({
     >
       <div className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(0deg,transparent,transparent_79px,rgba(180,150,100,0.06)_80px)]" />
 
-      <div className="relative z-10 flex h-50 shrink-0 items-end justify-center pt-14 pb-4">
-        <Capsule open={phase === "open" || phase === "result"} />
-      </div>
-
       {!showResult ? (
-        <div
-          className="relative z-10 animate-blink-wait pb-5 pl-[0.45em] text-[11px] tracking-[0.45em] text-[#b4a088]"
-          role="status"
-          aria-live="polite"
-        >
-          抽選中...
+        <div className="relative z-10 flex flex-col items-center">
+          <Capsule open={phase === "open"} />
+          <div
+            className="mt-12 animate-blink-wait pl-[0.45em] text-[11px] tracking-[0.45em] text-[#b4a088]"
+            role="status"
+            aria-live="polite"
+          >
+            抽選中...
+          </div>
         </div>
       ) : (
         <section
-          className="relative z-10 w-full max-w-92 animate-result-rise px-5.5 pb-[calc(3rem+env(safe-area-inset-bottom))]"
+          className="relative z-10 w-full max-w-92 animate-result-rise px-5.5"
           aria-live="polite"
         >
           <div className="mb-4.5 flex justify-center gap-2">
