@@ -2,20 +2,12 @@
 export function Condiments() {
   return (
     <g>
-      {/* ねぎ(緑色の小口切り) — 麺全体に散らす */}
-      <NegiSlice cx={102} cy={172} rotate={-12} r={9} />
-      <NegiSlice cx={128} cy={166} rotate={10} r={10} />
-      <NegiSlice cx={150} cy={178} rotate={-6} r={8.5} />
-      <NegiSlice cx={122} cy={192} rotate={6} r={9.5} />
-      <NegiSlice cx={170} cy={170} rotate={18} r={8} />
-      <NegiSlice cx={188} cy={196} rotate={-22} r={9} />
-      <NegiSlice cx={220} cy={172} rotate={8} r={8.5} />
-      <NegiSlice cx={244} cy={198} rotate={-12} r={9.5} />
-      <NegiSlice cx={278} cy={172} rotate={14} r={9} />
-      <NegiSlice cx={300} cy={188} rotate={-8} r={8.5} />
-      <NegiSlice cx={156} cy={204} rotate={20} r={9} />
-      <NegiSlice cx={206} cy={210} rotate={-16} r={9.5} />
-      <NegiSlice cx={266} cy={208} rotate={10} r={9} />
+      {/* ねぎ(緑色の小口切り) — 中央付近に少量散らす */}
+      <NegiSlice cx={158} cy={180} rotate={-8} r={8.5} />
+      <NegiSlice cx={196} cy={172} rotate={14} r={9} />
+      <NegiSlice cx={238} cy={184} rotate={-12} r={8.5} />
+      <NegiSlice cx={180} cy={204} rotate={10} r={9} />
+      <NegiSlice cx={224} cy={206} rotate={-6} r={8.5} />
 
       {/* 七味 */}
       <circle cx="192" cy="184" r="1.6" fill="#e74c3c" />

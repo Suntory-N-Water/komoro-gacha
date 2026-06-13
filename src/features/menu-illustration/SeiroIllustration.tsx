@@ -64,54 +64,76 @@ function RoundSeiro() {
   );
 }
 
-// せいろの上に「巻き取って」盛り付けたそば/うどん。
-// ソフトクリームのように同心楕円が連なる束で表現する(2山)。
+// せいろの上に盛り付けたそば/うどん。モンブラン状に高く盛る。
+// 同心楕円のリングを高さを変えて積み上げ、Z軸方向の盛り上がりを表現。
 function SeiroNoodles({ noodleKind }: { noodleKind: "soba" | "udon" }) {
   const isSoba = noodleKind === "soba";
   const c1 = isSoba ? "#5a4a40" : "#e8dfc8";
   const c2 = isSoba ? "#6e5c50" : "#f4ecd8";
   const c3 = isSoba ? "#8a7060" : "#fff7e0";
-  const w = isSoba ? 3.2 : 5;
+  const cShade = isSoba ? "#3a2a22" : "#c8bf9c";
+  const w = isSoba ? 3 : 4.5;
 
-  // 同心楕円を描く束(クルクル巻きの一束)
-  const coil = (cx: number, cy: number, baseRx: number, baseRy: number) => (
-    <g>
-      {[0, 1, 2, 3, 4, 5].map((i) => {
-        const rx = baseRx - i * (baseRx / 8);
-        const ry = baseRy - i * (baseRy / 8);
-        const color = i % 2 === 0 ? c1 : c2;
-        return (
+  // モンブラン状の一山。底面が広く、上に向かって細く高くなる。
+  // 各層は楕円リングで、cyを上に移動させながら半径を縮める。
+  const mound = (
+    cx: number,
+    baseCy: number,
+    baseRx: number,
+    baseRy: number,
+  ) => {
+    const layers = 7;
+    const layerSpecs = Array.from({ length: layers }, (_, i) => {
+      const t = i / (layers - 1);
+      return {
+        t,
+        cy: baseCy - t * baseRy * 1.7,
+        rx: baseRx * (1 - t * 0.78),
+        ry: baseRy * (1 - t * 0.78),
+        color: t > 0.7 ? c3 : i % 2 === 0 ? c1 : c2,
+      };
+    });
+    return (
+      <g>
+        {/* 影(底面に落ちる影) */}
+        <ellipse
+          cx={cx}
+          cy={baseCy + 4}
+          rx={baseRx * 1.02}
+          ry={baseRy * 0.9}
+          fill={cShade}
+          opacity="0.55"
+        />
+        {layerSpecs.map((s) => (
           <ellipse
-            key={i}
+            key={`${cx}-${s.cy.toFixed(2)}`}
             cx={cx}
-            cy={cy}
-            rx={rx}
-            ry={ry}
+            cy={s.cy}
+            rx={s.rx}
+            ry={s.ry}
             fill="none"
-            stroke={color}
+            stroke={s.color}
             strokeWidth={w}
           />
-        );
-      })}
-      {/* 中央のハイライト */}
-      <ellipse
-        cx={cx}
-        cy={cy}
-        rx={baseRx * 0.18}
-        ry={baseRy * 0.18}
-        fill="none"
-        stroke={c3}
-        strokeWidth={w * 0.7}
-      />
-    </g>
-  );
+        ))}
+        {/* 頂上の小さな結び目(麺の終端) */}
+        <ellipse
+          cx={cx}
+          cy={baseCy - baseRy * 1.7}
+          rx={baseRx * 0.08}
+          ry={baseRy * 0.08}
+          fill={c3}
+        />
+      </g>
+    );
+  };
 
   return (
     <g clipPath={`url(#${SEIRO_CLIP_ID})`}>
-      {/* 左の巻き(やや低い) */}
-      {coil(120, 220, 48, 22)}
-      {/* 右の巻き(やや高い・前) */}
-      {coil(220, 215, 52, 24)}
+      {/* 左の山(やや小さく奥) */}
+      {mound(125, 232, 46, 20)}
+      {/* 右の山(大きく手前) */}
+      {mound(218, 238, 52, 22)}
     </g>
   );
 }
@@ -187,28 +209,28 @@ function SidePlate({ children }: { children: ReactNode }) {
       <ellipse
         cx="200"
         cy="368"
-        rx="140"
-        ry="12"
+        rx="108"
+        ry="10"
         fill="#000000"
         opacity="0.18"
       />
-      {/* 皿(楕円・浅め・横長) */}
-      <ellipse cx="200" cy="358" rx="138" ry="22" fill="#ffffff" />
+      {/* 皿(楕円・浅め) */}
+      <ellipse cx="200" cy="358" rx="106" ry="18" fill="#ffffff" />
       <ellipse
         cx="200"
         cy="354"
-        rx="138"
-        ry="22"
+        rx="106"
+        ry="18"
         fill="#f6efe0"
         stroke="#c8bdb0"
         strokeWidth="2"
       />
-      <ellipse cx="200" cy="350" rx="124" ry="15" fill="#fdf9ee" />
+      <ellipse cx="200" cy="350" rx="94" ry="12" fill="#fdf9ee" />
       <ellipse
         cx="200"
         cy="354"
-        rx="124"
-        ry="15"
+        rx="94"
+        ry="12"
         fill="none"
         stroke="#d8c8b0"
         strokeWidth="1"
@@ -216,7 +238,7 @@ function SidePlate({ children }: { children: ReactNode }) {
       />
       {/* 載せるトッピング: トッピングは概ね(200,180)中心で半径〜80程度を想定。
          皿中心(200,348)に縮小して収める */}
-      <g transform="translate(110 267) scale(0.45)">{children}</g>
+      <g transform="translate(130 285) scale(0.35)">{children}</g>
     </g>
   );
 }
