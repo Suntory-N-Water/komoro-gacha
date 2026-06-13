@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { DrawMenuOutput } from "../../usecase/gacha";
+import { MenuIllustration } from "../menu-illustration/MenuIllustration";
 import Capsule from "./Capsule";
-import MenuPhotoPlaceholder from "./MenuPhotoPlaceholder";
 
 type GachaPhase = "idle" | "drop" | "open" | "result";
 
@@ -127,7 +127,12 @@ export default function ResultOverlay({
             </div>
           </div>
 
-          <MenuPhotoPlaceholder />
+          <div className="mb-5.5 aspect-square w-full overflow-hidden rounded-xl">
+            <MenuIllustration
+              menuId={menuItem?.id ?? ""}
+              label={menuItem?.name ?? "メニューイラスト"}
+            />
+          </div>
 
           <div className="mb-3 text-center">
             <h2

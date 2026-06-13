@@ -176,7 +176,7 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
       </section>
 
       <div
-        className="relative z-10 shrink-0 px-6 pt-5 pb-[calc(3.25rem+env(safe-area-inset-bottom))]"
+        className="relative z-10 shrink-0 px-6 pt-5"
         aria-hidden={phase !== "idle"}
       >
         <button
@@ -191,6 +191,26 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
           引　く
         </button>
       </div>
+
+      <footer
+        className="relative z-10 shrink-0 px-6 pt-3 pb-[calc(1rem+env(safe-area-inset-bottom))] text-center"
+        aria-hidden={phase !== "idle"}
+      >
+        <p className="text-[9.5px] leading-relaxed text-[#a89880]">
+          非公式アプリ。株式会社三ッ和・小諸そばとは無関係です。
+          <br />
+          カロリー・メニュー情報は
+          <a
+            href="https://www.k-mitsuwa.co.jp/business/komoro"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+          >
+            小諸そば公式サイト
+          </a>
+          より引用。
+        </p>
+      </footer>
 
       <ResultOverlay
         phase={phase}
