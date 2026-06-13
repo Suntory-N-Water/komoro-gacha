@@ -12,7 +12,7 @@
     "build": "astro build",
     "start": "astro preview",
     "start:worker": "pnpm run build && wrangler dev",
-    "deploy": "pnpm run build && wrangler deploy",
+    "deploy": "wrangler deploy --minify",
     "astro": "astro",
     "format": "biome format --write --reporter=github . && prettier --write --log-level warn '**/*.astro'",
     "check": "biome check .",
