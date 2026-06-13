@@ -6,6 +6,7 @@ type Props = {
 };
 
 const { title = '小諸そばガチャ' } = Astro.props;
+const isProd = import.meta.env.PROD;
 ---
 
 <!doctype html>
@@ -25,12 +26,36 @@ const { title = '小諸そばガチャ' } = Astro.props;
   </head>
   <body>
     <slot />
-    <script is:inline>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
+    <script is:inline define:vars={{ isProd }}>
+      (() => {
+        if (!('serviceWorker' in navigator)) {
+          return;
+        }
+
+        if (isProd) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js');
+          });
+          return;
+        }
+
+        // 開発時は既存の SW を解除し、キャッシュも破棄する(スーパーリロード不要化)
+        navigator.serviceWorker.getRegistrations().then((regs) => {
+          for (const reg of regs) {
+            reg.unregister();
+          }
         });
-      }
+
+        if (!('caches' in window)) {
+          return;
+        }
+
+        caches.keys().then((keys) => {
+          for (const key of keys) {
+            caches.delete(key);
+          }
+        });
+      })();
     </script>
   </body>
 </html>
