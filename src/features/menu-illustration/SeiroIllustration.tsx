@@ -9,131 +9,139 @@ import { YamakakeTopping } from "./toppings/YamakakeTopping";
 
 const SEIRO_CLIP_ID = "seiro-noodle-clip";
 
-// 丸いせいろ(竹ザル)。中央配置。
-function RoundSeiro() {
+// 角せいろを斜め俯瞰で。手前が広く奥が狭い台形 + 側面に木目。
+function SquareSeiro() {
   return (
     <g>
       {/* テーブル影 */}
       <ellipse
         cx="170"
-        cy="290"
+        cy="298"
         rx="140"
-        ry="14"
+        ry="12"
         fill="#000000"
-        opacity="0.12"
+        opacity="0.18"
       />
 
-      {/* せいろ外枠(木) */}
-      <ellipse cx="170" cy="225" rx="135" ry="62" fill="#6a4a28" />
-      <ellipse cx="170" cy="220" rx="135" ry="62" fill="#8a6438" />
-      {/* 内側の木目 */}
-      <ellipse cx="170" cy="218" rx="128" ry="56" fill="#a0784a" />
-      {/* 竹のすだれ部分(内側) */}
-      <ellipse cx="170" cy="215" rx="120" ry="50" fill="#c8a870" />
+      {/* 側面影 */}
+      <path d="M 45 257 L 295 257 L 288 292 L 52 292 Z" fill="#5e371c" />
+      {/* 側面前面 */}
+      <path d="M 45 248 L 295 248 L 288 283 L 52 283 Z" fill="#7a4a25" />
+      {/* 側面の木目 */}
+      <g stroke="#5e371c" strokeWidth="1" opacity="0.55">
+        <line x1="55" y1="258" x2="285" y2="258" />
+        <line x1="57" y1="268" x2="283" y2="268" />
+        <line x1="58" y1="278" x2="282" y2="278" />
+      </g>
+      {/* 木の節 */}
+      <ellipse cx="100" cy="270" rx="5" ry="2.5" fill="#5e371c" opacity="0.5" />
+      <ellipse cx="230" cy="263" rx="4" ry="2" fill="#5e371c" opacity="0.5" />
 
-      {/* 竹のすだれ線(横方向) */}
-      <g stroke="#9a7240" strokeWidth="1.3" opacity="0.55">
-        <line x1="58" y1="200" x2="282" y2="200" />
-        <line x1="54" y1="210" x2="286" y2="210" />
-        <line x1="52" y1="220" x2="288" y2="220" />
-        <line x1="54" y1="230" x2="286" y2="230" />
-        <line x1="58" y1="240" x2="282" y2="240" />
-        <line x1="64" y1="250" x2="276" y2="250" />
+      {/* 天面外枠(台形・手前が広い) */}
+      <path d="M 65 165 L 275 165 L 295 248 L 45 248 Z" fill="#7a4a25" />
+      {/* 天面くぼみ */}
+      <path d="M 78 175 L 262 175 L 280 240 L 60 240 Z" fill="#b87a3a" />
+
+      {/* すだれ(竹簾) */}
+      <g
+        stroke="#7a4a25"
+        strokeWidth="1.3"
+        opacity="0.6"
+        clipPath={`url(#${SEIRO_CLIP_ID})`}
+      >
+        <line x1="72" y1="182" x2="268" y2="182" />
+        <line x1="70" y1="192" x2="270" y2="192" />
+        <line x1="68" y1="203" x2="272" y2="203" />
+        <line x1="66" y1="215" x2="274" y2="215" />
+        <line x1="63" y1="228" x2="277" y2="228" />
       </g>
 
-      {/* 外枠ハイライト */}
+      {/* 縁のハイライト */}
       <path
-        d="M 50 215 Q 70 175 170 168 Q 270 175 290 215"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="2"
-        opacity="0.35"
-      />
-      {/* 外枠の縁 */}
-      <ellipse
-        cx="170"
-        cy="215"
-        rx="120"
-        ry="50"
-        fill="none"
-        stroke="#5a3a1c"
-        strokeWidth="2"
-        opacity="0.6"
+        d="M 67 167 L 273 167"
+        stroke="#c89060"
+        strokeWidth="1.5"
+        opacity="0.7"
       />
     </g>
   );
 }
 
-// せいろの上に盛り付けたそば/うどん。モンブラン状に高く盛る。
-// 同心楕円のリングを高さを変えて積み上げ、Z軸方向の盛り上がりを表現。
+// せいろの上に盛り付けたそば/うどん。山のシルエットと横方向の麺線で
+// 高さ(Z軸)を Y軸プロファイルに置き換えて見せる方式。
 function SeiroNoodles({ noodleKind }: { noodleKind: "soba" | "udon" }) {
   const isSoba = noodleKind === "soba";
-  const c1 = isSoba ? "#5a4a40" : "#e8dfc8";
-  const c2 = isSoba ? "#6e5c50" : "#f4ecd8";
-  const c3 = isSoba ? "#8a7060" : "#fff7e0";
-  const cShade = isSoba ? "#3a2a22" : "#c8bf9c";
-  const w = isSoba ? 3 : 4.5;
+  // 山の塗り(下層・中段・頂上ハイライト)。soba は金茶系で木色と差別化。
+  const fillBase = isSoba ? "#b8924c" : "#e8dfc8";
+  const fillMid = isSoba ? "#c9a560" : "#f4ecd8";
+  const highlightStroke = isSoba ? "#e6c684" : "#fff7e0";
+  // 麺の流線
+  const strandMid = isSoba ? "#7a5a28" : "#b8a878";
+  const strandDark = isSoba ? "#5a4520" : "#9a8858";
+  const strandLight = isSoba ? "#f5e0aa" : "#ffffff";
 
-  // モンブラン状の一山。底面が広く、上に向かって細く高くなる。
-  // 各層は楕円リングで、cyを上に移動させながら半径を縮める。
-  const mound = (
-    cx: number,
-    baseCy: number,
-    baseRx: number,
-    baseRy: number,
-  ) => {
-    const layers = 7;
-    const layerSpecs = Array.from({ length: layers }, (_, i) => {
-      const t = i / (layers - 1);
-      return {
-        t,
-        cy: baseCy - t * baseRy * 1.7,
-        rx: baseRx * (1 - t * 0.78),
-        ry: baseRy * (1 - t * 0.78),
-        color: t > 0.7 ? c3 : i % 2 === 0 ? c1 : c2,
-      };
-    });
-    return (
-      <g>
-        {/* 影(底面に落ちる影) */}
-        <ellipse
-          cx={cx}
-          cy={baseCy + 4}
-          rx={baseRx * 1.02}
-          ry={baseRy * 0.9}
-          fill={cShade}
-          opacity="0.55"
-        />
-        {layerSpecs.map((s) => (
-          <ellipse
-            key={`${cx}-${s.cy.toFixed(2)}`}
-            cx={cx}
-            cy={s.cy}
-            rx={s.rx}
-            ry={s.ry}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={w}
-          />
-        ))}
-        {/* 頂上の小さな結び目(麺の終端) */}
-        <ellipse
-          cx={cx}
-          cy={baseCy - baseRy * 1.7}
-          rx={baseRx * 0.08}
-          ry={baseRy * 0.08}
-          fill={c3}
-        />
-      </g>
-    );
-  };
-
+  // せいろ天面台形(60,240)-(280,240)-(262,175)-(78,175)に収まる山。
+  // 麺の山が天面外にはみ出ないよう、麺関連はクリップで台形に閉じ込める。
   return (
     <g clipPath={`url(#${SEIRO_CLIP_ID})`}>
-      {/* 左の山(やや小さく奥) */}
-      {mound(125, 232, 46, 20)}
-      {/* 右の山(大きく手前) */}
-      {mound(218, 238, 52, 22)}
+      {/* 山の輪郭(下層・最大シルエット) */}
+      <path
+        d="M 70 240 C 90 215, 108 192, 130 178 C 150 165, 165 152, 178 148 C 192 146, 208 158, 222 172 C 242 190, 260 215, 278 240 Z"
+        fill={fillBase}
+      />
+      {/* 山の中段 */}
+      <path
+        d="M 82 240 C 100 218, 118 198, 138 182 C 155 170, 170 158, 182 156 C 194 156, 208 168, 220 180 C 238 198, 254 218, 270 240 Z"
+        fill={fillMid}
+        opacity="0.95"
+      />
+      {/* 山の頂上ハイライト(稜線) */}
+      <path
+        d="M 118 182 C 138 165, 158 152, 178 150 C 196 150, 208 158, 220 170 C 235 184, 250 200, 264 218"
+        stroke={highlightStroke}
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+        opacity="0.9"
+      />
+
+      {/* 麺一本一本: 横方向に流れる細い線 */}
+      <g
+        stroke={strandMid}
+        strokeWidth="0.9"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.75"
+      >
+        <path d="M 72 235 Q 125 198 178 172 T 278 235" />
+        <path d="M 78 238 Q 130 202 182 176 T 276 238" />
+        <path d="M 88 228 Q 132 192 178 165 T 270 228" />
+        <path d="M 100 218 Q 138 182 180 158 T 262 220" />
+        <path d="M 112 205 Q 142 175 180 152 T 254 208" />
+      </g>
+      {/* 手前の濃い麺(ピントが合う層) */}
+      <g
+        stroke={strandDark}
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.9"
+      >
+        <path d="M 76 238 Q 128 202 182 175 T 278 238" />
+        <path d="M 92 230 Q 138 192 182 165 T 270 230" />
+      </g>
+      {/* ハイライト線 */}
+      <g
+        stroke={strandLight}
+        strokeWidth="0.9"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.9"
+      >
+        <path d="M 122 178 Q 158 152 198 148" />
+        <path d="M 134 188 Q 168 162 208 160" />
+        <path d="M 148 170 Q 178 150 218 152" />
+      </g>
     </g>
   );
 }
@@ -286,11 +294,12 @@ export function SeiroArtwork({ spec }: { spec: MenuVisualNoodle }) {
   return (
     <g>
       <defs>
+        {/* 麺の山がせいろ上方向に突き出るよう、内側台形を上に延長したクリップ */}
         <clipPath id={SEIRO_CLIP_ID}>
-          <ellipse cx="170" cy="215" rx="118" ry="48" />
+          <path d="M 78 100 L 262 100 L 280 240 L 60 240 Z" />
         </clipPath>
       </defs>
-      <RoundSeiro />
+      <SquareSeiro />
       <SeiroNoodles noodleKind={spec.noodleKind} />
       <TsuyuCup withOroshi={spec.topping === "oroshi"} />
       <ToppingSlot topping={spec.topping} />
