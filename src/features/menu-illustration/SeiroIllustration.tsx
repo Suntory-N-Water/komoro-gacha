@@ -146,8 +146,14 @@ function SeiroNoodles({ noodleKind }: { noodleKind: "soba" | "udon" }) {
   );
 }
 
-// つゆ猪口 (右上)。おろしせいろのときは大根おろしを入れる。
-function TsuyuCup({ withOroshi }: { withOroshi: boolean }) {
+// つゆ猪口 (右上)。おろしせいろのときは大根おろし、山かけせいろのときはとろろを入れる。
+function TsuyuCup({
+  withOroshi,
+  withYamakake,
+}: {
+  withOroshi: boolean;
+  withYamakake: boolean;
+}) {
   return (
     <g>
       {/* 影 */}
@@ -205,6 +211,45 @@ function TsuyuCup({ withOroshi }: { withOroshi: boolean }) {
           <ellipse cx="344" cy="218" rx="3.2" ry="1.5" fill="#27ae60" />
         </g>
       )}
+
+      {/* とろろ(山かけ。半透明の白で粘度感を出す) */}
+      {withYamakake && (
+        <g>
+          <ellipse
+            cx="340"
+            cy="222"
+            rx="26"
+            ry="5.5"
+            fill="#f0ece4"
+            opacity="0.92"
+          />
+          <ellipse
+            cx="340"
+            cy="220"
+            rx="20"
+            ry="4"
+            fill="#e8e4dc"
+            opacity="0.9"
+          />
+          <ellipse
+            cx="336"
+            cy="217"
+            rx="11"
+            ry="2"
+            fill="#ffffff"
+            opacity="0.7"
+          />
+          {/* とろろの糸引き */}
+          <path
+            d="M 322 222 Q 332 220 342 222 T 358 222"
+            fill="none"
+            stroke="#d8d4cc"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            opacity="0.55"
+          />
+        </g>
+      )}
     </g>
   );
 }
@@ -245,8 +290,9 @@ function SidePlate({ children }: { children: ReactNode }) {
         opacity="0.7"
       />
       {/* 載せるトッピング: トッピングは概ね(200,180)中心で半径〜80程度を想定。
-         皿中心(200,348)に縮小して収める */}
-      <g transform="translate(130 285) scale(0.35)">{children}</g>
+         皿に盛り付けた見た目になるよう、皿幅(rx=94)の7割程度を占めるサイズで
+         皿中心(200,348)に配置する */}
+      <g transform="translate(80 240) scale(0.6)">{children}</g>
     </g>
   );
 }
@@ -278,7 +324,8 @@ function ToppingSlot({ topping }: { topping: NoodleTopping }) {
     topping === "kitsune" ||
     topping === "tanuki" ||
     topping === "tsukimi" ||
-    topping === "tsukiyoBakashi"
+    topping === "tsukiyoBakashi" ||
+    topping === "yamakake"
   ) {
     return null;
   }
@@ -301,7 +348,10 @@ export function SeiroArtwork({ spec }: { spec: MenuVisualNoodle }) {
       </defs>
       <SquareSeiro />
       <SeiroNoodles noodleKind={spec.noodleKind} />
-      <TsuyuCup withOroshi={spec.topping === "oroshi"} />
+      <TsuyuCup
+        withOroshi={spec.topping === "oroshi"}
+        withYamakake={spec.topping === "yamakake"}
+      />
       <ToppingSlot topping={spec.topping} />
     </g>
   );

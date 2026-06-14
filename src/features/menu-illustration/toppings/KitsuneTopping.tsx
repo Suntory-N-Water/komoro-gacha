@@ -12,10 +12,8 @@ export function KitsuneTopping() {
         opacity="0.2"
       />
 
-      {/* 奥側(やや右に偏らせて重なり表現) */}
-      <Aburaage cx={222} cy={172} rotate={6} scale={0.95} />
-      {/* 手前側(大きく広げて主役) */}
-      <Aburaage cx={188} cy={190} rotate={-4} scale={1.05} />
+      {/* 油揚げ1枚を中央に大きく配置 */}
+      <Aburaage cx={200} cy={185} rotate={-4} scale={1.1} />
     </g>
   );
 }
