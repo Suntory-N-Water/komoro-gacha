@@ -197,7 +197,7 @@ export default function GachaApp({ selectableOptions }: GachaAppProps) {
         aria-hidden={phase !== "idle"}
       >
         <p className="text-[9.5px] leading-relaxed text-[#a89880]">
-          非公式アプリ。株式会社三ッ和・小諸そばとは無関係です。
+          非公式アプリ。株式会社三ッ和・小諸そばとは一切関係ありません。
           <br />
           カロリー・メニュー情報は
           <a
